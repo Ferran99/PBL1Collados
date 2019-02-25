@@ -1,0 +1,79 @@
+//Primero tenemos que hacer un update de nuestros programas en debian
+aptitude update 
+
+// Procedemos a instalar LDAP
+sudo aptitude install slapd ldap-utils php-ldap 
+
+// Configuramos slapd
+
+dpkg-reconfigure -plow slapd
+
+Nom del domini: fjeclot.net
+Nom de l'organització: fjeclot.net
+Contrasenya de l'administrador: fjeclot (NOTA: L'administrador d'openLDAP s'anomena admin)
+Tipus de Base de Dades: HDB
+Purga la base de dades: No
+Moure la base de dades anterior. Sí
+Protocol LDAPv2: No (Nota: Potser no ho pregunta)
+
+//Executar slapcat per comprovar que s'ha configurat correctament:
+
+sudo slapcat
+
+//comprobar que sale por el puerto correcoto
+
+sudo nmap -sT -O localhost | grep ldap
+
+//si nmap no está instalado lo instalamos 
+
+sudo apt-get install nmap
+
+//Descargar fichero ldif.tar.gz
+
+wget www.collados.org/daw2/m08/uf3/ldif.tar.gz
+
+//Una vez descargado lo descomprimimos
+
+tar -xzvf ldif.tar.gz
+
+//Crear las organizaciones administradors y desenvolupadors
+
+	1. Utilizamos el fichero LDIF de nombre ou.ldif
+	2. Añadir la información del fichero LDIF al directorio utilizando la herramienta slapadd
+		
+		sudo service slapd stop 
+		sudo slapadd -c -v -l ou.ldif 
+		service slapd start 
+	3. Ejecutar programa slapcat para comprobar que toda la información ha sido copiada
+		sudo slapcat
+
+//Para añadir los usuarios sysadmin, webdev, sysdev, usr1 y usr2 utilizaremos el siguiente comando
+
+sudo ldapadd -h localhost -c -x -D cn=admin,dc=fjeclot,dc=net -W -f users.ldif
+
+//Para asignar contraseña a los diferentes usuarios utilizaremos el siguiente comando
+
+	1. Cambiar contaseña usuario sysadmin (grupo administradors):
+		ldappasswd -h localhost -x -D cn=admin,dc=fjeclot,dc=net -W -S uid=sysadmin,ou=administradors,dc=fjeclot,dc=net
+		
+		//Te pediara una contraseña, tienes que poner fjeclot1, confirmas la contraseña y pones la contraseña del LDAP (fjeclot)
+	
+	2. Cambiar contraseña usuario webdev (grupo desenvolupadors)
+
+		sudo ldappasswd -h localhost -x -D cn=admin,dc=fjeclot,dc=net -W -S uid=webdev,ou=desenvolupadors,dc=fjeclot,dc=net
+		
+                //Te pediara una contraseña, tienes que poner fjeclot2, confirmas la contraseña y po$
+
+	3 Cambiar contraseña usuario sysdev (grupo desenvolupadors):
+
+		sudo ldappasswd -h localhost -x -D cn=admin,dc=fjeclot,dc=net -W -S uid=sysdev,ou=desenvolupadors,dc=fjeclot,dc=net
+				
+               //Te pediara una contraseña, tienes que poner fjeclot3, confirmas la contraseña y po$
+
+
+	4. Cambiar contraseña usuario usr1 (grupo usuaris):
+
+		sudo ldappasswd -h localhost -x -D cn=admin,dc=fjeclot,dc=net -W -S uid=usr1,ou=usuaris,dc=fjeclot,dc=net
+		
+               //Te pediara una contraseña, tienes que poner fjeclot4, confirmas la contraseña y po$
+
