@@ -1,8 +1,0 @@
-ORDENES DE INTERES
-
-
-Para mirar puertos de los servidores:
-------------------------------------
-nmap -sT -O localhost
-
-
