@@ -81,3 +81,46 @@ sudo ldapadd -h localhost -c -x -D cn=admin,dc=fjeclot,dc=net -W -f users.ldif
 11/03/2019
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+//Procederemos a hacer las comprovaciones conforme se ha creado correctamente: 
+	
+	1. Encontrar el movil del usuario webdev:
+
+		ldapsearch -x -h localhost -b dc=fjeclot,dc=net uid=webdev mobile
+
+	2. Encontrar directorio personal del usuario usr1: 
+		
+		ldapsearch -x -h localhost -b dc=fjeclot,dc=net uid=usr1 homeDirectory
+
+	3. Encontrar titulo del usuario sysadmin:
+
+		ldapsearch -x -h localhost -b dc=fjeclot,dc=net uid=sysadmin title
+
+//Para modificar una entrada se puede utulizar el orden ldapmodify y un fichero LDIF, por ejemplo vamos a cambiar el uidNumber del usuario usr2 del valor 2500 al 5200, para eso tenemos que crear el siguiente archivo:
+
+
+
+
+http://www.collados.org/daw2/m08/uf3/modusr2.ldif
+
+//una vez descargado el archivo, ejecutamos la siguiente orden:
+
+: ldapmodify -h localhost -x -D “cn=admin,dc=fjeclot,dc=net” -W -f modusr2.ldif
+
+
+//Comprobar que tienes los siguientes extensiones de php:
+
+sudo aptitude install libapache2-mod-php
+sudo aptitude install php-ldap
+
+//Previamente tenemos que instalar apache2
+
+//Una vez instalados todos los requisitos descargamos el siguiente fichero: 
+
+wget www.collados.org/daw2/m08/uf3/phpldap.tar.gz
+
+//Descargado este fichero lo copiamos en el directorio de apache /var/www/html/ y lo descomprimimos:
+
+tar -czfv phpldap.tar.gz 
+
+//En los ficheros login.php y home.php cambiamos la IP d ejemeplo y ponemos 127.0.0.1
+
