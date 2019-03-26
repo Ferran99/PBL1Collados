@@ -1,0 +1,22 @@
+
+dn: uid=654,ou=usuaris,dc=fjeclot,dc=net
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+objectClass: posixAccount
+objectClass: shadowAccount
+uid: 654
+cn: Ferran Castañé
+sn: Castañé
+givenName: Ferran
+title: 65432
+telephoneNumber: 76543
+mobile: 8765
+postalAddress: gtfred
+loginShell: /bin/bash
+gidNumber: 2000
+uidNumber: 1000
+homeDirectory: /users/654/
+description: gjhk
+
